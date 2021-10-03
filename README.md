@@ -17,3 +17,5 @@
 ## Badges
 
 ## How to Contribute
+
+Pull requests are always welcome. Please read the [contributing guidelines](.github/CONTRIBUTING.md).
