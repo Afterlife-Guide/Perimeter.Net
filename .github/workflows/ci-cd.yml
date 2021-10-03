@@ -1,0 +1,40 @@
+name: Perimeter.Net Integration
+
+env:
+  VERSION_NUMBER: 0.0.1
+
+on:
+  push:
+    branches:
+    - master
+    - develop
+    - feature/*
+    - release/*
+    - hotfix/*
+  pull_request:
+    branches: [ develop ]
+  workflow_run:
+    workflows: ["Dependabot PR"]
+    types: 
+      - completed
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Run tests
+      run: dotnet test --logger "junit;LogFileName=results.xml"
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v1
+      if: always()
+      with:
+        files: "**/TestResults/*.xml"
