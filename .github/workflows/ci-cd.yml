@@ -13,11 +13,6 @@ on:
     - hotfix/*
   pull_request:
     branches: [ develop ]
-  workflow_run:
-    workflows: ["Dependabot PR"]
-    types: 
-      - completed
-  workflow_dispatch:
 
 jobs:
   test:
@@ -35,6 +30,6 @@ jobs:
       run: dotnet test --logger "junit;LogFileName=results.xml"
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action/composite@v1
-      if: always()
+      if: ${{ github.actor != 'dependabot[bot]' }}
       with:
         files: "**/TestResults/*.xml"
